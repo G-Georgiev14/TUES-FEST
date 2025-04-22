@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход и Регистрация</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 400px;
+            margin: 20px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .input-group {
+            position: relative;
+            margin: 10px 0;
+        }
+        input {
+            width: calc(100% - 20px);
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease; 
+        }
+        #login-email{
+            margin-top: 10px;
+        }
+        #register-email{
+            margin-top: 10px;
+        }
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            user-select: none;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .link {
+            color: #007bff;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+        .link:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+        p {
+            margin: 15px 0;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Вход -->
+    <div class="container" id="login-container">
+        <h1>🔑 Вход</h1>
+        <input type="text" id="login-username" placeholder="Потребителско име">
+        <span class="error" id="login-username-error"></span>
+        <input type="email" id="login-email" placeholder="Имейл">
+        <span class="error" id="login-email-error"></span>
+        <div class="input-group">
+            <input type="password" id="login-password" placeholder="Парола">
+            <span class="toggle-password" onclick="togglePassword('login-password')">👁️</span>
+        </div>
+        <span class="error" id="login-password-error"></span>
+        <button onclick="login()">Вход</button>
+        <p class="link" onclick="showRegister()">Нямаш акаунт? Регистрирай се</p>
+        <p class="link" onclick="showForgotPassword()">Забравена парола?</p>
+    </div>
+
+    <!-- Регистрация -->
+    <div class="container" id="register-container" style="display: none;">
+        <h1>📝 Регистрация</h1>
+        <input type="text" id="register-username" placeholder="Потребителско име">
+        <span class="error" id="register-username-error"></span>
+        <input type="email" id="register-email" placeholder="Имейл">
+        <span class="error" id="register-email-error"></span>
+        <div class="input-group">
+            <input type="password" id="register-password" placeholder="Парола">
+            <span class="toggle-password" onclick="togglePassword('register-password')">👁️</span>
+        </div>
+        <span class="error" id="register-password-error"></span>
+        <button onclick="register()">Регистрация</button>
+        <p class="link" onclick="showLogin()">Вече имаш акаунт? Влез</p>
+    </div>
+
+    <!-- Забравена парола -->
+    <div class="container" id="forgot-password-container" style="display: none;">
+        <h1>🔄 Забравена парола</h1>
+        <input type="email" id="forgot-email" placeholder="Имейл">
+        <span class="error" id="forgot-email-error"></span>
+        <button onclick="forgotPassword()">Нулирай паролата</button>
+        <p class="link" onclick="showLogin()">Обратно към вход</p>
+    </div>
+
+    <script>
+        // Функция за превключване на видимостта на паролата
+        function togglePassword(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleIcon = passwordInput.nextElementSibling;
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleIcon.textContent = "👁️‍🗨️"; // Задраскано око
+            } else {
+                passwordInput.type = "password";
+                toggleIcon.textContent = "👁️"; // Обикновено око
+            }
+        }
+
+        // Валидация на имейл
+        function validateEmail(email) {
+            return email.includes("@");
+        }
+
+        // Валидация на парола
+        function validatePassword(password) {
+            return password.length >= 6 && /[A-Z]/.test(password);
+        }
+
+        // Показване на съобщение за грешка
+        function showError(elementId, message) {
+            let errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = "block";
+        }
+
+        // Скриване на съобщение за грешка
+        function hideError(elementId) {
+            let errorElement = document.getElementById(elementId);
+            errorElement.style.display = "none";
+        }
+
+        // Показване на регистрацията
+        function showRegister() {
+            document.getElementById("register-container").style.display = "block";
+            document.getElementById("login-container").style.display = "none";
+            document.getElementById("forgot-password-container").style.display = "none";
+        }
+
+        // Показване на входа
+        function showLogin() {
+            document.getElementById("register-container").style.display = "none";
+            document.getElementById("login-container").style.display = "block";
+            document.getElementById("forgot-password-container").style.display = "none";
+        }
+
+        // Показване на забравена парола
+        function showForgotPassword() {
+            document.getElementById("register-container").style.display = "none";
+            document.getElementById("login-container").style.display = "none";
+            document.getElementById("forgot-password-container").style.display = "block";
+        }
+
+        // Регистрация
+        function register() {
+            let username = document.getElementById("register-username").value.trim();
+            let email = document.getElementById("register-email").value.trim();
+            let password = document.getElementById("register-password").value.trim();
+
+            // Скриване на всички грешки
+            hideError("register-username-error");
+            hideError("register-email-error");
+            hideError("register-password-error");
+
+            if (!username) {
+                showError("register-username-error", "Моля, попълнете потребителско име!");
+                return;
+            }
+
+            if (!email) {
+                showError("register-email-error", "Моля, попълнете имейл!");
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                showError("register-email-error", "Имейлът трябва да съдържа символа '@'!");
+                return;
+            }
+
+            if (!password) {
+                showError("register-password-error", "Моля, попълнете парола!");
+                return;
+            }
+
+            if (!validatePassword(password)) {
+                showError("register-password-error", "Паролата трябва да е поне 6 символа и да съдържа поне една главна буква!");
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem("ttw_users")) || [];
+            if (users.some(user => user.username === username)) {
+                showError("register-username-error", "Това потребителско име вече съществува!");
+                return;
+            }
+            if (users.some(user => user.email === email)) {
+                showError("register-email-error", "Този имейл вече е регистриран!");
+                return;
+            }
+
+            users.push({ username: username, email: email, password: password, points: 0 });
+            localStorage.setItem("ttw_users", JSON.stringify(users));
+            localStorage.setItem("ttw_currentUser", username);
+            alert("Регистрацията е успешна!");
+            showLogin();
+        }
+
+        // Вход
+        function login() {
+            let username = document.getElementById("login-username").value.trim();
+            let email = document.getElementById("login-email").value.trim();
+            let password = document.getElementById("login-password").value.trim();
+
+            // Скриване на всички грешки
+            hideError("login-username-error");
+            hideError("login-email-error");
+            hideError("login-password-error");
+
+            if (!username) {
+                showError("login-username-error", "Моля, попълнете потребителско име!");
+                return;
+            }
+
+            if (!email) {
+                showError("login-email-error", "Моля, попълнете имейл!");
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                showError("login-email-error", "Имейлът трябва да съдържа символа '@'!");
+                return;
+            }
+
+            if (!password) {
+                showError("login-password-error", "Моля, попълнете парола!");
+                return;
+            }
+
+            if (!validatePassword(password)) {
+                showError("login-password-error", "Паролата трябва да е поне 6 символа и да съдържа поне една главна буква!");
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem("ttw_users")) || [];
+            let user = users.find(user => user.username === username && user.email === email && user.password === password);
+
+            if (!user) {
+                showError("login-password-error", "Грешно потребителско име, имейл или парола!");
+                return;
+            }
+
+            localStorage.setItem("ttw_currentUser", username);
+            alert("Входът е успешен!");
+            window.location.href = "index.html"; // Пренасочване към началната страница
+        }
+
+        // Забравена парола
+        function forgotPassword() {
+            let email = document.getElementById("forgot-email").value.trim();
+
+            // Скриване на грешката
+            hideError("forgot-email-error");
+
+            if (!email) {
+                showError("forgot-email-error", "Моля, попълнете имейл!");
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                showError("forgot-email-error", "Имейлът трябва да съдържа символа '@'!");
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem("ttw_users")) || [];
+            let user = users.find(user => user.email === email);
+
+            if (!user) {
+                showError("forgot-email-error", "Имейлът не е намерен!");
+                return;
+            }
+
+            let newPassword = prompt("Въведи нова парола:");
+            if (!newPassword) return;
+
+            if (!validatePassword(newPassword)) {
+                alert("Паролата трябва да е поне 6 символа и да съдържа поне една главна буква!");
+                return;
+            }
+
+            user.password = newPassword;
+            localStorage.setItem("ttw_users", JSON.stringify(users));
+            alert("Паролата е сменена успешно!");
+            showLogin();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Program | Train To Win</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #e9edf4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Main content styles */
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(135deg, #007bff, #00e1ff);
+            border-radius: 2px;
+        }
+
+        .week-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .day-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            opacity: 0.5;
+        }
+
+        .day-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .day-card.current-day {
+            opacity: 1;
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .day-card.current-day .day-header {
+            background: linear-gradient(135deg, #007bff, #00e1ff);
+        }
+
+        .day-header {
+            background: #007bff;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .day-title {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .day-content {
+            padding: 1.5rem;
+        }
+
+        .exercise-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .exercise-item {
+            position: relative;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        .exercise-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .exercise-item.completed {
+            background: #e8f5e9;
+            border-left: 4px solid #28a745;
+        }
+
+        .exercise-item .exercise-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .exercise-item .exercise-duration {
+            background: #e3f2fd;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            color: #1976d2;
+        }
+
+        .exercise-item .points {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ffd700;
+            color: #000;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .exercise-item.completed .points {
+            background: #28a745;
+            color: white;
+        }
+
+        .exercise-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .exercise-item label {
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .exercise-item.completed label {
+            text-decoration: line-through;
+            color: #666;
+        }
+
+        .day-progress {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #007bff, #00e1ff);
+            transition: width 0.3s ease;
+        }
+
+        .completion-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .completion-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .completion-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .completion-status {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .completion-status.completed {
+            color: #28a745;
+        }
+
+        .completion-status.incomplete {
+            color: #dc3545;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #007bff, #00e1ff);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+        }
+
+        /* Progress section */
+        .progress-section {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 30px auto;
+            max-width: 800px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #007bff, #00e1ff);
+        }
+
+        .progress-section h3 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .progress-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #007bff, transparent);
+        }
+
+        .progress-text {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-top: 15px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .progress-label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .progress-label i {
+            color: #007bff;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* Remove footer styles */
+        footer {
+            display: none;
+        }
+
+        /* Add styles for points notification */
+        .points-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #28a745, #00c853);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            animation: slideIn 0.3s ease-out;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .points-notification i {
+            font-size: 1.2em;
+            animation: bounce 0.5s ease infinite;
+        }
+
+        .points-notification.warning {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Remove all camera-related styles */
+        .photo-verification,
+        .detection-status,
+        .face-detection-overlay,
+        .motion-container,
+        .exercise-progress,
+        .progress-bar,
+        .progress,
+        .progress-text,
+        .camera-container,
+        #camera-preview,
+        #pose-canvas,
+        .verification-content,
+        .verification-buttons,
+        .capture-btn,
+        .cancel-btn,
+        .verification-status,
+        .verification-success,
+        .verification-error,
+        .detection-success,
+        .detection-error,
+        .detection-warning,
+        .face-detection-status {
+            display: none !important;
+        }
+
+        /* Weekly Program Styles */
+        .weekly-program {
+            padding: 40px 0;
+            background: #f5f5f5;
+        }
+
+        .weekly-program h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .program-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .program-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .program-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .program-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #3586ff, #00ff88);
+        }
+
+        .program-card h3 {
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .program-card h3 i {
+            color: #3586ff;
+            font-size: 1.2em;
+        }
+
+        .program-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .program-card li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #666;
+        }
+
+        .program-card li:last-child {
+            border-bottom: none;
+        }
+
+        .program-card .exercise-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .program-card .exercise-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .program-card .exercise-item label {
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .program-card .exercise-item.completed label {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .program-card .exercise-item .points {
+            background: #3586ff;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+
+        .program-card .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #eee;
+            border-radius: 3px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .program-card .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #3586ff, #00ff88);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .program-card .progress-text {
+            text-align: right;
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .program-card .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .program-card .day-header .day-title {
+            font-size: 1.2em;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .program-card .day-header .day-progress {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .program-grid {
+                grid-template-columns: 1fr;
+                padding: 0 15px;
+            }
+
+            .program-card {
+                padding: 20px;
+            }
+
+            .program-card h3 {
+                font-size: 1.3em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .weekly-program h2 {
+                font-size: 2em;
+            }
+
+            .program-card {
+                padding: 15px;
+            }
+
+            .program-card h3 {
+                font-size: 1.2em;
+            }
+
+            .program-card li {
+                font-size: 0.9em;
+            }
+        }
+
+        /* Remove Points Table Styles */
+        .points-table-container,
+        .points-table-container h3,
+        #points-table,
+        #points-table th,
+        #points-table td,
+        #points-table tr:hover,
+        .points-cell {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="upraznenia.html" class="back-button">
+            <i class="fas fa-arrow-left"></i> Назад
+        </a>
+        
+        <h1 class="page-title">Weekly Program</h1>
+
+        <div class="progress-section">
+            <h3>Седмичен Прогрес</h3>
+            <div class="progress-bar">
+                <div class="progress" id="total-progress"></div>
+            </div>
+            <div class="progress-text">
+                <span id="progress-text">0% завършени</span>
+                <span class="progress-label">
+                    <i class="fas fa-fire"></i>
+                    <span id="completed-exercises">0</span> от <span id="total-exercises">0</span> упражнения
+                </span>
+            </div>
+            <div class="progress-details">
+                <span class="progress-label">
+                    <i class="fas fa-check-circle"></i>
+                    Завършени дни: <span id="completed-days">0</span>
+                </span>
+                <span class="progress-label">
+                    <i class="fas fa-calendar-alt"></i>
+                    Оставащи дни: <span id="remaining-days">0</span>
+                </span>
+            </div>
+        </div>
+        
+        <div class="week-container">
+            <div class="day-card" id="monday">
+                <div class="day-header">
+                    <h2 class="day-title">Понеделник</h2>
+                    <span class="day-progress">0/5 completed</span>
+                </div>
+                <div class="day-content">
+                    <div class="exercise-list">
+                        <div class="exercise-item" data-exercise-id="monday-1">
+                            <input type="checkbox" id="monday-1">
+                            <label for="monday-1">Кардио (30 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="monday-2">
+                            <input type="checkbox" id="monday-2">
+                            <label for="monday-2">Силови упражнения (45 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="monday-3">
+                            <input type="checkbox" id="monday-3">
+                            <label for="monday-3">Разтягане (15 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="monday-4">
+                            <input type="checkbox" id="monday-4">
+                            <label for="monday-4">Планка (3x1 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="monday-5">
+                            <input type="checkbox" id="monday-5">
+                            <label for="monday-5">Скокове на скачаща въже (10 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-card" id="tuesday">
+                <div class="day-header">
+                    <h2 class="day-title">Вторник</h2>
+                    <span class="day-progress">0/5 completed</span>
+                </div>
+                <div class="day-content">
+                    <div class="exercise-list">
+                        <div class="exercise-item" data-exercise-id="tuesday-1">
+                            <input type="checkbox" id="tuesday-1">
+                            <label for="tuesday-1">Йога (45 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="tuesday-2">
+                            <input type="checkbox" id="tuesday-2">
+                            <label for="tuesday-2">Пилатес (30 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="tuesday-3">
+                            <input type="checkbox" id="tuesday-3">
+                            <label for="tuesday-3">Медитация (15 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="tuesday-4">
+                            <input type="checkbox" id="tuesday-4">
+                            <label for="tuesday-4">Разтягане на гърба (10 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="tuesday-5">
+                            <input type="checkbox" id="tuesday-5">
+                            <label for="tuesday-5">Дълбоко дишане (5 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-card" id="wednesday">
+                <div class="day-header">
+                    <h2 class="day-title">Сряда</h2>
+                    <span class="day-progress">0/5 completed</span>
+                </div>
+                <div class="day-content">
+                    <div class="exercise-list">
+                        <div class="exercise-item" data-exercise-id="wednesday-1">
+                            <input type="checkbox" id="wednesday-1">
+                            <label for="wednesday-1">HIIT (20 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="wednesday-2">
+                            <input type="checkbox" id="wednesday-2">
+                            <label for="wednesday-2">Силови упражнения (40 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="wednesday-3">
+                            <input type="checkbox" id="wednesday-3">
+                            <label for="wednesday-3">Бягане на място (15 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="wednesday-4">
+                            <input type="checkbox" id="wednesday-4">
+                            <label for="wednesday-4">Бурпи (3x10)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="wednesday-5">
+                            <input type="checkbox" id="wednesday-5">
+                            <label for="wednesday-5">Разтягане (15 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-card" id="thursday">
+                <div class="day-header">
+                    <h2 class="day-title">Четвъртък</h2>
+                    <span class="day-progress">0/5 completed</span>
+                </div>
+                <div class="day-content">
+                    <div class="exercise-list">
+                        <div class="exercise-item" data-exercise-id="thursday-1">
+                            <input type="checkbox" id="thursday-1">
+                            <label for="thursday-1">Кардио (45 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="thursday-2">
+                            <input type="checkbox" id="thursday-2">
+                            <label for="thursday-2">Разтягане (20 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="thursday-3">
+                            <input type="checkbox" id="thursday-3">
+                            <label for="thursday-3">Велосипед (30 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="thursday-4">
+                            <input type="checkbox" id="thursday-4">
+                            <label for="thursday-4">Планка (4x1 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="thursday-5">
+                            <input type="checkbox" id="thursday-5">
+                            <label for="thursday-5">Разтягане на крака (15 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-card" id="friday">
+                <div class="day-header">
+                    <h2 class="day-title">Петък</h2>
+                    <span class="day-progress">0/5 completed</span>
+                </div>
+                <div class="day-content">
+                    <div class="exercise-list">
+                        <div class="exercise-item" data-exercise-id="friday-1">
+                            <input type="checkbox" id="friday-1">
+                            <label for="friday-1">Силови упражнения (60 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="friday-2">
+                            <input type="checkbox" id="friday-2">
+                            <label for="friday-2">Кардио (30 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="friday-3">
+                            <input type="checkbox" id="friday-3">
+                            <label for="friday-3">Скокове (15 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="friday-4">
+                            <input type="checkbox" id="friday-4">
+                            <label for="friday-4">Планка (5x1 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="friday-5">
+                            <input type="checkbox" id="friday-5">
+                            <label for="friday-5">Разтягане (20 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-card" id="saturday">
+                <div class="day-header">
+                    <h2 class="day-title">Събота</h2>
+                    <span class="day-progress">0/5 completed</span>
+                </div>
+                <div class="day-content">
+                    <div class="exercise-list">
+                        <div class="exercise-item" data-exercise-id="saturday-1">
+                            <input type="checkbox" id="saturday-1">
+                            <label for="saturday-1">Йога (60 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="saturday-2">
+                            <input type="checkbox" id="saturday-2">
+                            <label for="saturday-2">Разтягане (30 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="saturday-3">
+                            <input type="checkbox" id="saturday-3">
+                            <label for="saturday-3">Медитация (20 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="saturday-4">
+                            <input type="checkbox" id="saturday-4">
+                            <label for="saturday-4">Планка (3x1.5 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="saturday-5">
+                            <input type="checkbox" id="saturday-5">
+                            <label for="saturday-5">Дълбоко дишане (10 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-card" id="sunday">
+                <div class="day-header">
+                    <h2 class="day-title">Неделя</h2>
+                    <span class="day-progress">0/5 completed</span>
+                </div>
+                <div class="day-content">
+                    <div class="exercise-list">
+                        <div class="exercise-item" data-exercise-id="sunday-1">
+                            <input type="checkbox" id="sunday-1">
+                            <label for="sunday-1">Лека кардио (30 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="sunday-2">
+                            <input type="checkbox" id="sunday-2">
+                            <label for="sunday-2">Разтягане (20 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="sunday-3">
+                            <input type="checkbox" id="sunday-3">
+                            <label for="sunday-3">Йога (30 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="sunday-4">
+                            <input type="checkbox" id="sunday-4">
+                            <label for="sunday-4">Планка (2x1 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                        <div class="exercise-item" data-exercise-id="sunday-5">
+                            <input type="checkbox" id="sunday-5">
+                            <label for="sunday-5">Медитация (15 мин)</label>
+                            <span class="points">15 точки</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Remove photo verification modal -->
+    <div class="photo-verification" id="photo-verification" style="display: none;">
+    </div>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
+    <script type="module">
+        import {
+            updateCompletionStatus,
+            checkAndResetExercises,
+            resetExercisesAtMidnight,
+            showResetNotification
+        } from './exercise_utils.js';
+
+        const WEEKLY_DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+        const POINTS_PER_EXERCISE = 15;
+
+        // Function to update progress bar
+        function updateProgress() {
+            const days = WEEKLY_DAYS;
+            let totalExercises = 0;
+            let completedExercises = 0;
+            let completedDays = 0;
+
+            days.forEach(day => {
+                const checkboxes = document.querySelectorAll(`[data-day="${day}"]`);
+                const dayStatus = document.getElementById(`${day}-status`);
+                let dayCompleted = true;
+
+                checkboxes.forEach(checkbox => {
+                    totalExercises++;
+                    if (checkbox.checked) {
+                        completedExercises++;
+                    } else {
+                        dayCompleted = false;
+                    }
+                });
+
+                if (dayCompleted && checkboxes.length > 0) {
+                    completedDays++;
+                    dayStatus.textContent = 'Завършено';
+                    dayStatus.classList.remove('incomplete');
+                    dayStatus.classList.add('completed');
+                } else {
+                    dayStatus.textContent = 'Незавършено';
+                    dayStatus.classList.remove('completed');
+                    dayStatus.classList.add('incomplete');
+                }
+            });
+
+            const progressPercent = Math.round((completedExercises / totalExercises) * 100);
+            document.getElementById('total-progress').style.width = `${progressPercent}%`;
+            document.getElementById('progress-text').textContent = `${progressPercent}% завършени`;
+            document.getElementById('completed-exercises').textContent = completedExercises;
+            document.getElementById('total-exercises').textContent = totalExercises;
+            document.getElementById('completed-days').textContent = completedDays;
+            document.getElementById('remaining-days').textContent = days.length - completedDays;
+        }
+
+        // Load completion status from localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check and reset exercises at midnight
+            checkAndResetExercises(WEEKLY_DAYS, 'weekly');
+
+            // Check for reset every minute
+            setInterval(() => resetExercisesAtMidnight('weekly'), 60000);
+            
+            // Also check immediately when the page loads
+            resetExercisesAtMidnight('weekly');
+
+            // Update auth link and load progress
+            updateAuthLink();
+            loadProgress();
+            updateProgress();
+        });
+
+        // Override the global updateCompletionStatus to use the correct points
+        window.updateCompletionStatus = (exercise) => {
+            updateCompletionStatus(exercise, POINTS_PER_EXERCISE, 'weekly');
+            updateProgress();
+        };
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get current day
+            const today = new Date().getDay();
+            const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const currentDay = days[today];
+
+            // Get current user
+            const currentUser = localStorage.getItem('ttw_currentUser');
+            // Премахваме автоматичното пренасочване при зареждане на страницата 
+            // if (!currentUser) {
+            //     window.location.href = 'login.html';
+            //     return;
+            // }
+
+            // Hide all day cards except current day
+            document.querySelectorAll('.day-card').forEach(card => {
+                if (card.id !== currentDay) {
+                    card.style.display = 'none';
+                } else {
+                    card.classList.add('current-day');
+                }
+            });
+
+            // Load saved progress for current user
+            loadProgress(currentUser);
+
+            // Add event listeners to checkboxes
+            document.querySelectorAll('.exercise-item input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (!currentUser) {
+                        alert('Моля, влезте в системата, за да маркирате упражнения като завършени.');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    
+                    const exerciseItem = this.closest('.exercise-item');
+                    const dayCard = this.closest('.day-card');
+                    const dayId = dayCard.id;
+                    const exerciseId = exerciseItem.dataset.exerciseId;
+                    
+                    if (this.checked) {
+                        exerciseItem.classList.add('completed');
+                        saveProgress(dayId, exerciseId, true, currentUser);
+                        // Check if points were already awarded for this user
+                        if (!isPointsAwarded(dayId, exerciseId, currentUser)) {
+                            awardPoints(15, currentUser);
+                            markPointsAwarded(dayId, exerciseId, currentUser);
+                        } else {
+                            showNotification('Вече сте получили точки за това упражнение!', 'warning');
+                        }
+                    } else {
+                        exerciseItem.classList.remove('completed');
+                        saveProgress(dayId, exerciseId, false, currentUser);
+                    }
+                    
+                    updateDayProgress(dayCard);
+                    updateTotalProgress();
+                });
+            });
+        });
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `points-notification ${type}`;
+            
+            // Add appropriate icon based on type
+            let icon = '';
+            switch(type) {
+                case 'success':
+                    icon = '<i class="fas fa-check-circle"></i>';
+                    break;
+                case 'warning':
+                    icon = '<i class="fas fa-exclamation-circle"></i>';
+                    break;
+                case 'info':
+                    icon = '<i class="fas fa-info-circle"></i>';
+                    break;
+            }
+            
+            notification.innerHTML = `${icon} ${message}`;
+            document.body.appendChild(notification);
+            
+            // Add slide out animation before removing
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out forwards';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 2700);
+        }
+
+        function isPointsAwarded(dayId, exerciseId, userId) {
+            const awardedPoints = JSON.parse(localStorage.getItem(`ttw_awardedPoints_${userId}`) || '{}');
+            return awardedPoints[dayId] && awardedPoints[dayId][exerciseId];
+        }
+
+        function markPointsAwarded(dayId, exerciseId, userId) {
+            let awardedPoints = JSON.parse(localStorage.getItem(`ttw_awardedPoints_${userId}`) || '{}');
+            if (!awardedPoints[dayId]) {
+                awardedPoints[dayId] = {};
+            }
+            awardedPoints[dayId][exerciseId] = true;
+            localStorage.setItem(`ttw_awardedPoints_${userId}`, JSON.stringify(awardedPoints));
+        }
+
+        function saveProgress(dayId, exerciseId, completed, userId) {
+            let progress = JSON.parse(localStorage.getItem(`ttw_weeklyProgress_${userId}`) || '{}');
+            
+            if (!progress[dayId]) {
+                progress[dayId] = {};
+            }
+            
+            progress[dayId][exerciseId] = completed;
+            localStorage.setItem(`ttw_weeklyProgress_${userId}`, JSON.stringify(progress));
+        }
+
+        function loadProgress(userId) {
+            const progress = JSON.parse(localStorage.getItem(`ttw_weeklyProgress_${userId}`) || '{}');
+            
+            Object.keys(progress).forEach(dayId => {
+                const dayCard = document.getElementById(dayId);
+                if (!dayCard) return;
+                
+                Object.entries(progress[dayId]).forEach(([exerciseId, completed]) => {
+                    const exerciseItem = dayCard.querySelector(`[data-exercise-id="${exerciseId}"]`);
+                    if (exerciseItem) {
+                        const checkbox = exerciseItem.querySelector('input[type="checkbox"]');
+                        if (checkbox) {
+                            checkbox.checked = completed;
+                            if (completed) {
+                                exerciseItem.classList.add('completed');
+                            }
+                        }
+                    }
+                });
+                
+                updateDayProgress(dayCard);
+            });
+        }
+
+        function updateDayProgress(dayCard) {
+            const totalExercises = dayCard.querySelectorAll('.exercise-item').length;
+            const completedExercises = dayCard.querySelectorAll('.exercise-item.completed').length;
+            const progressPercentage = (completedExercises / totalExercises) * 100;
+            
+            const progressBar = dayCard.querySelector('.progress');
+            const progressText = dayCard.querySelector('.day-progress');
+            
+            if (progressBar) {
+                progressBar.style.width = `${progressPercentage}%`;
+            }
+            
+            if (progressText) {
+                progressText.textContent = `${completedExercises}/${totalExercises} completed`;
+            }
+        }
+
+        function updateTotalProgress() {
+            const allExercises = document.querySelectorAll('.exercise-item');
+            const completedExercises = document.querySelectorAll('.exercise-item.completed');
+            const totalProgress = (completedExercises.length / allExercises.length) * 100;
+            
+            document.getElementById('total-progress').style.width = `${totalProgress}%`;
+            document.getElementById('progress-text').textContent = `${Math.round(totalProgress)}% завършени`;
+            document.getElementById('completed-exercises').textContent = completedExercises.length;
+            document.getElementById('total-exercises').textContent = allExercises.length;
+            
+            // Update completed days
+            const completedDays = Array.from(document.querySelectorAll('.day-card')).filter(day => {
+                const total = day.querySelectorAll('.exercise-item').length;
+                const completed = day.querySelectorAll('.exercise-item.completed').length;
+                return total > 0 && total === completed;
+            }).length;
+            
+            document.getElementById('completed-days').textContent = completedDays;
+            document.getElementById('remaining-days').textContent = 7 - completedDays;
+        }
+
+        function awardPoints(points, userId) {
+            // Get current user's points from ttw_users
+            let users = JSON.parse(localStorage.getItem('ttw_users') || '[]');
+            const userIndex = users.findIndex(user => user.username === userId);
+            
+            if (userIndex === -1) {
+                // Add new user
+                users.push({ username: userId, points: points });
+            } else {
+                // Update existing user's points
+                users[userIndex].points = (users[userIndex].points || 0) + points;
+            }
+            
+            // Save updated users array
+            localStorage.setItem('ttw_users', JSON.stringify(users));
+            
+            // Show success notification
+            showNotification(`+${points} точки!`, 'success');
+        }
+
+        // Function to reset exercises for all users at midnight
+        function resetExercisesAtMidnight() {
+            const now = new Date();
+            const lastReset = localStorage.getItem('ttw_lastResetDate');
+            const today = now.toDateString();
+            
+            if (lastReset !== today) {
+                // Get all users from localStorage
+                const users = JSON.parse(localStorage.getItem('ttw_users') || '[]');
+                
+                // Reset progress for each user
+                users.forEach(user => {
+                    localStorage.removeItem(`ttw_weeklyProgress_${user.username}`);
+                    localStorage.removeItem(`ttw_awardedPoints_${user.username}`);
+                });
+                
+                // Update last reset date
+                localStorage.setItem('ttw_lastResetDate', today);
+                
+                // Show reset notification
+                showNotification('Упражненията са нулирани за новия ден!', 'info');
+            }
+        }
+
+        // Check for reset every minute
+        setInterval(resetExercisesAtMidnight, 60000);
+
+        // Also check immediately when the page loads
+        resetExercisesAtMidnight();
+    </script>
+</body>
+</html> 

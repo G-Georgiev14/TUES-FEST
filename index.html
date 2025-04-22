@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#007bff">
+    <meta name="description" content="Train To Win - Приложение за фитнес и тренировки">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <title>Начална страница</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="/unnamed.png">
+    <style>
+        /* Основни стилове */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #e9edf4;
+            color: #333;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Навигация */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 20px 5%;
+            color: white;
+            position: fixed;
+            width: 90%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        
+        }
+
+        .navbar .logo {
+            flex: 0 0 auto;
+        }
+
+        .navbar .logo a {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .navbar .nav-links {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .navbar .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger .bar {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 4px 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            margin-right: 50px;
+        }
+
+        .navbar .mobile-dropdown {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 123, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideDown 0.3s ease;
+        }
+
+        .navbar .mobile-dropdown a {
+            padding: 15px 20px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar .mobile-dropdown a:last-child {
+            border-bottom: none;
+        }
+
+        .navbar .mobile-dropdown a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Основно съдържание */
+        .content {
+            margin-top: 80px;
+            padding: 20px;
+            flex: 1;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive стилове */
+        @media (max-width: 768px) {
+            .navbar .nav-links {
+                display: none;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .navbar .mobile-dropdown.active {
+                display: block;
+            }
+        }
+
+        /* Херо секция */
+        .hero {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .cta-button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .cta-button:hover {
+            background-color: #0056b3;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        /* Footer стилове */
+        footer {
+            background: #3586ff;
+            width: 100%;
+            padding: 20px 0;
+            position: relative;
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        footer .wave {
+            position: absolute;
+            top: -100px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url(wave.png);
+            background-size: 1000px 100px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        footer .wave#wave1 {
+            z-index: 1000;
+            opacity: 1;
+            bottom: 0;
+            animation: animateWave 4s linear infinite;
+        }
+
+        footer .wave#wave2 {
+            z-index: 999;
+            opacity: 0.5;
+            bottom: 10px;
+            animation: animateWave_02 4s linear infinite;
+        }
+
+        footer .wave#wave3 {
+            z-index: 1000;
+            opacity: 0.2;
+            bottom: 15px;
+            animation: animateWave 4s linear infinite;
+        }
+
+        footer .wave#wave4 {
+            z-index: 999;
+            opacity: 0.7;
+            bottom: 20px;
+            animation: animateWave_02 4s linear infinite;
+        }
+
+        @keyframes animateWave {
+            0% {
+                background-position-x: 1000px;
+            }
+            100% {
+                background-position-x: 0px;
+            }
+        }
+
+        @keyframes animateWave_02 {
+            0% {
+                background-position-x: 0;
+            }
+            100% {
+                background-position-x: 1000px;
+            }
+        }
+
+        footer .social_icon, 
+        footer .menu {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+            flex-wrap: wrap;
+            z-index: 1001;
+            width: 100%;
+            padding: 0;
+            gap: 10px;
+        }
+
+        footer .social_icon li,
+        footer .menu li {
+            list-style: none;
+            margin: 0;
+        }
+
+        footer .social_icon li a {
+            font-size: 2em;
+            color: #fff;
+            margin: 0 10px;
+            display: inline-block;
+            transition: 0.5s;
+        }
+
+        footer .social_icon li a:hover {
+            transform: translateY(-10px);
+        }
+
+        footer .menu {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+            flex-wrap: nowrap;
+            z-index: 1001;
+            width: 100%;
+            padding: 0;
+            gap: 20px;
+        }
+
+        footer .menu li {
+            list-style: none;
+            margin: 0;
+        }
+
+        footer .menu li a {
+            font-size: 1.2em;
+            color: #fff;
+            margin: 0;
+            display: inline-block;
+            text-decoration: none;
+            opacity: 0.75;
+            white-space: nowrap;
+        }
+
+        footer .menu li a:hover {
+            opacity: 1;
+        }
+
+        footer p {
+            color: white;
+            margin: 10px 0;
+            font-size: 1em;
+            opacity: 0.75;
+            width: 100%;
+            text-align: center;
+            z-index: 1001;
+            position: relative;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        /* Responsive footer styles */
+        @media (max-width: 768px) {
+            footer {
+                padding: 15px 0;
+            }
+
+            footer .social_icon {
+                margin: 15px 0;
+                gap: 15px;
+            }
+
+            footer .social_icon li a {
+                font-size: 1.5em;
+                margin: 0 8px;
+            }
+
+            footer .menu {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            footer .menu li {
+                margin: 0;
+            }
+
+            footer .menu li a {
+                font-size: 1em;
+                margin: 0;
+                padding: 5px 0;
+            }
+
+            footer p {
+                font-size: 0.9em;
+                padding: 0 15px;
+            }
+
+            footer .wave {
+                height: 80px;
+                top: -80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            footer {
+                padding: 10px 0;
+            }
+
+            footer .social_icon {
+                gap: 10px;
+            }
+
+            footer .social_icon li a {
+                font-size: 1.3em;
+                margin: 0 6px;
+            }
+
+            footer .menu {
+                gap: 10px;
+            }
+
+            footer .menu li a {
+                font-size: 0.9em;
+            }
+
+            footer p {
+                font-size: 0.8em;
+                padding: 0 10px;
+            }
+        }
+
+        /* Add styles for leaderboard */
+        .leaderboard-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .leaderboard-title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+
+        .leaderboard-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.3s ease;
+        }
+
+        .leaderboard-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .rank {
+            width: 40px;
+            height: 40px;
+            background: #007bff;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .user-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .username {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .points {
+            font-weight: bold;
+            color: white;
+            background: #007bff;
+            padding: 5px 15px;
+            border-radius: 15px;
+        }
+
+        .current-user {
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+
+        .current-user .rank {
+            background: #28a745;
+        }
+
+        /* Add overlay styles */
+        .content-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .login-prompt {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .login-prompt h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .login-prompt p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-prompt a {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .login-prompt a:hover {
+            background: #0056b3;
+        }
+
+        /* Hide content when not logged in */
+        .content-blocked {
+            display: none;
+        }
+
+        .leaderboard-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 100px;
+        }
+
+        .leaderboard-container h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 24px;
+                    }
+
+        .leaderboard-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            margin: 10px 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .leaderboard-item:hover {
+            transform: translateX(5px);
+        }
+
+        .leaderboard-item.empty-slot {
+            opacity: 0.5;
+            background: #f5f5f5;
+        }
+
+        .top-1 {
+            background: linear-gradient(135deg, #ffd700 0%, #fff7cc 100%);
+        }
+
+        .top-2 {
+            background: linear-gradient(135deg, #c0c0c0 0%, #f5f5f5 100%);
+        }
+
+        .top-3 {
+            background: linear-gradient(135deg, #cd7f32 0%, #ffdbc3 100%);
+        }
+
+        .rank {
+            font-weight: bold;
+            font-size: 1.2em;
+            min-width: 40px;
+        }
+
+        .username {
+            flex-grow: 1;
+            margin: 0 20px;
+            font-weight: 500;
+        }
+
+        .points {
+            font-weight: bold;
+            color: white;
+            background: #007bff;
+            padding: 5px 15px;
+            border-radius: 15px;
+        }
+
+        .top-1 .points {
+            background: #ffd700;
+            color: white;
+        }
+
+        .top-2 .points {
+            background: #c0c0c0;
+            color: white;
+        }
+
+        .top-3 .points {
+            background: #cd7f32;
+            color: white;
+        }
+
+        /* Remove old klasacia table styles */
+        .klasacia-table {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Add overlay div -->
+    <div class="content-overlay" id="content-overlay">
+        <div class="login-prompt">
+            <h2>Добре дошли в Train To Win</h2>
+            <p>Моля, влезте в системата, за да достъпите съдържанието.</p>
+            <a href="login.html">Вход</a>
+        </div>
+    </div>
+
+    <!-- Add content-blocked class to main content -->
+    <div class="content-blocked">
+    <!-- Навигационен бар -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="#home" class="homepage">Train To Win</a>
+        </div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="upraznenia.html">Упражнения</a></li>
+            <li><a href="eko_nagradi.html">Еко Награди</a></li>
+            <li><a href="nagradi.html">Награди</a></li>
+                <li id="auth-link"><a href="login.html">Вход</a></li>
+        </ul>
+        <div class="hamburger" onclick="toggleMenu()">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <div class="mobile-dropdown" id="mobile-dropdown">
+            <a href="upraznenia.html">Упражнения</a>
+            <a href="eko_nagradi.html">Еко Награди</a>
+            <a href="nagradi.html">Награди</a>
+        </div>
+    </nav>
+
+    <!-- Основно съдържание -->
+    <div class="content">
+        <!-- Херо секция -->
+        <section id="home" class="hero">
+            <h1>Добре дошли в нашия сайт!</h1>
+            <p>Тук можете да намерите упражнения, класации и награди.</p>
+            <a href="upraznenia.html" class="cta-button">Започнете сега</a>
+            <div class="image-container">
+                <img src="snimka.jpg" alt="gym">
+            </div>
+        </section>
+
+            <!-- Add leaderboard section after hero section -->
+            <div class="leaderboard-container">
+                <h2>Топ 10 Потребители</h2>
+                <ul id="leaderboard-list" class="leaderboard-list">
+                    <!-- Leaderboard items will be added here -->
+                </ul>
+            </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="wave" id="wave1"></div>
+        <div class="wave" id="wave2"></div>
+        <div class="wave" id="wave3"></div>
+        <div class="wave" id="wave4"></div>
+        <ul class="social_icon">
+            <li><a href="#"><ion-icon name="logo-facebook"></ion-icon></a></li>
+            <li><a href="#"><ion-icon name="logo-twitter"></ion-icon></a></li>
+            <li><a href="#"><ion-icon name="logo-instagram"></ion-icon></a></li>
+            <li><a href="#"><ion-icon name="logo-youtube"></ion-icon></a></li>
+        </ul>
+        <ul class="menu">
+            <li><a href="#">About</a></li>
+            <li><a href="#">Team</a></li>          
+            <li><a href="#">Services</a></li>  
+            <li><a href="#">Contact</a></li>  
+        </ul>
+        <p>@2025 Train To Win | All Rights Reserved</p>
+    </footer>
+    </div>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <script>
+        // Функция за превключване на мобилното меню
+        function toggleMenu() {
+            const mobileDropdown = document.getElementById("mobile-dropdown");
+            mobileDropdown.classList.toggle("active");
+        }
+
+        // Функция за проверка и нулиране на таблицата в началото на месеца
+        function checkAndResetMonthly() {
+            const now = new Date();
+            const lastResetMonth = localStorage.getItem('ttw_lastResetMonth');
+            const currentMonth = now.getMonth() + 1; // getMonth() връща 0-11
+            
+            if (!lastResetMonth || parseInt(lastResetMonth) !== currentMonth) {
+                // Нулиране на точките за всички потребители
+                let users = JSON.parse(localStorage.getItem('ttw_users') || '[]');
+                users.forEach(user => {
+                    user.points = 0;
+                });
+                localStorage.setItem('ttw_users', JSON.stringify(users));
+                
+                // Запазване на текущия месец
+                localStorage.setItem('ttw_lastResetMonth', currentMonth);
+                
+                // Показване на нотификация
+                showNotification('Точките са нулирани за новия месец!', 'info');
+            }
+        }
+
+        // Функция за показване на нотификация
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `points-notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Функция за зареждане на класацията
+        function loadLeaderboard() {
+            const leaderboardList = document.getElementById('leaderboard-list');
+            const leaderboard = JSON.parse(localStorage.getItem('ttw_users') || '[]');
+            const currentUser = localStorage.getItem('ttw_currentUser');
+
+            // Clear existing items
+            leaderboardList.innerHTML = '';
+
+            // Add leaderboard items
+            leaderboard.forEach((user, index) => {
+                const li = document.createElement('li');
+                li.className = `leaderboard-item ${index < 3 ? `top-${index + 1}` : ''} ${user.username === currentUser ? 'current-user' : ''}`;
+                
+                li.innerHTML = `
+                    <span class="rank">${index + 1}</span>
+                    <span class="username">${user.username}</span>
+                    <span class="points">${user.points} точки</span>
+                `;
+                
+                leaderboardList.appendChild(li);
+            });
+
+            // Add empty slots if needed
+            const emptySlots = 10 - leaderboard.length;
+            for (let i = 0; i < emptySlots; i++) {
+                const li = document.createElement('li');
+                li.className = 'leaderboard-item empty-slot';
+                li.innerHTML = `
+                    <span class="rank">${leaderboard.length + i + 1}</span>
+                    <span class="username">Свободно място</span>
+                    <span class="points">0 точки</span>
+                `;
+                leaderboardList.appendChild(li);
+            }
+        }
+
+        // Load leaderboard when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAndResetMonthly();
+            loadLeaderboard();
+        });
+
+        // Update leaderboard every 30 seconds
+        setInterval(loadLeaderboard, 30000);
+
+        // Функция за зареждане на класацията
+        function loadKlasacia() {
+            // This function is no longer needed
+        }
+
+        // Функция за добавяне на нов потребител при успешен вход
+        function onSuccessfulLogin(username) {
+            let users = JSON.parse(localStorage.getItem("ttw_users")) || [];
+            if (!users.some(user => user.username === username)) {
+                users.push({ username: username, points: 0 });
+                localStorage.setItem("ttw_users", JSON.stringify(users));
+                updateLeaderboard();
+            }
+        }
+
+        // Зареждане на класацията при стартиране на страницата
+        window.onload = updateLeaderboard;
+
+        // Add this to your existing JavaScript
+        function updateAuthLink() {
+            const authLink = document.getElementById('auth-link');
+            const currentUser = localStorage.getItem('ttw_currentUser');
+            
+            if (currentUser) {
+                authLink.innerHTML = `<a href="#" onclick="handleLogout()">Изход (${currentUser})</a>`;
+            } else {
+                authLink.innerHTML = '<a href="login.html">Вход</a>';
+            }
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('ttw_currentUser');
+            updateAuthLink();
+            window.location.reload();
+        }
+
+        // Call updateAuthLink when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAuthLink();
+        });
+
+        // Add login check function
+        function checkLoginStatus() {
+            const currentUser = localStorage.getItem('ttw_currentUser');
+            const overlay = document.getElementById('content-overlay');
+            const content = document.querySelector('.content-blocked');
+            
+            if (!currentUser) {
+                overlay.style.display = 'flex';
+                content.style.display = 'none';
+            } else {
+                overlay.style.display = 'none';
+                content.style.display = 'block';
+            }
+        }
+
+        // Check login status when page loads
+        document.addEventListener('DOMContentLoaded', checkLoginStatus);
+
+        // Check login status when storage changes
+        window.addEventListener('storage', checkLoginStatus);
+
+        function updateLeaderboard() {
+            const leaderboardList = document.getElementById('leaderboard-list');
+            if (!leaderboardList) return;
+
+            leaderboardList.innerHTML = '';
+
+            // Get all users and sort them by points in descending order
+            let users = JSON.parse(localStorage.getItem('ttw_users')) || [];
+            users.sort((a, b) => (b.points || 0) - (a.points || 0));
+
+            // Take only top 10 users
+            const topUsers = users.slice(0, 10);
+
+            // Create leaderboard entries
+            topUsers.forEach((user, index) => {
+                const listItem = document.createElement('li');
+                listItem.className = 'leaderboard-item';
+
+                listItem.innerHTML = `
+                    <span class="rank">${index + 1}</span>
+                    <span class="username">${user.username}</span>
+                    <span class="points">${user.points || 0} точки</span>
+                `;
+
+                // Add special styling for top 3
+                if (index < 3) {
+                    listItem.classList.add(`top-${index + 1}`);
+                }
+
+                leaderboardList.appendChild(listItem);
+            });
+
+            // If there are less than 10 users, add empty slots
+            for (let i = topUsers.length; i < 10; i++) {
+                const listItem = document.createElement('li');
+                listItem.className = 'leaderboard-item empty-slot';
+                listItem.innerHTML = `
+                    <span class="rank">${i + 1}</span>
+                    <span class="username">Свободно място</span>
+                    <span class="points">0 точки</span>
+                `;
+                leaderboardList.appendChild(listItem);
+            }
+        }
+
+        // Add function to clear all users data
+        function clearAllUsersData() {
+            // Clear users data from localStorage
+            localStorage.removeItem('ttw_users');
+            
+            // Update the leaderboard to show empty slots
+            updateLeaderboard();
+            
+            // Show confirmation message
+            alert('Всички данни за потребителите са изчистени!');
+        }
+
+        // Add button to clear data
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAuthLink();
+            updateLeaderboard();
+        });
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

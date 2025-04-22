@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Exercises | Train To Win</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf4 100%);
+            margin: 0;
+            padding: 0;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 80px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+            position: relative;
+            padding-bottom: 1rem;
+            font-size: 2.5rem;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 4px;
+            background: linear-gradient(90deg, #007bff, #00e1ff);
+            border-radius: 2px;
+            box-shadow: 0 2px 4px rgba(0,123,255,0.3);
+        }
+
+        .exercises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .exercise-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+
+        .exercise-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #007bff, #00e1ff);
+            transition: height 0.3s ease;
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .exercise-card:hover::before {
+            height: 8px;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            border-radius: 20px 20px 0 0;
+            background: #000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .exercise-video {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            background: rgba(0, 123, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,123,255,0.3);
+        }
+
+        .play-button:hover {
+            background: rgba(0, 123, 255, 1);
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 8px 20px rgba(0,123,255,0.4);
+        }
+
+        .play-button i {
+            color: white;
+            font-size: 24px;
+            margin-left: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .play-button:hover i {
+            transform: scale(1.1);
+        }
+
+        .exercise-content {
+            padding: 2rem;
+        }
+
+        .exercise-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .exercise-card:hover .exercise-title {
+            color: #007bff;
+        }
+
+        .exercise-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .exercise-card:hover .exercise-description {
+            color: #555;
+        }
+
+        .exercise-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .exercise-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #555;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .exercise-detail:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .completion-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .completion-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .completion-checkbox input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: #28a745;
+            border-radius: 6px;
+            border: 2px solid #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .completion-checkbox input[type="checkbox"]:checked {
+            background-color: #28a745;
+            border-color: #28a745;
+            box-shadow: 0 2px 5px rgba(40,167,69,0.3);
+            transform: scale(1.1);
+        }
+
+        .completion-status {
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .completion-status.completed {
+            color: #28a745;
+            background: rgba(40,167,69,0.1);
+            transform: scale(1.05);
+        }
+
+        .completion-status.incomplete {
+            color: #dc3545;
+            background: rgba(220,53,69,0.1);
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #007bff, #00e1ff);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+        }
+
+        .points-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #28a745, #00c853);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            animation: slideIn 0.3s ease-out;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .points-notification i {
+            font-size: 1.2em;
+            animation: bounce 0.5s ease infinite;
+        }
+
+        .points-notification.warning {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(233,236,239,0.5);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 15px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #007bff, #00e1ff);
+            transition: width 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,123,255,0.3);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="upraznenia.html" class="back-button">
+            <i class="fas fa-arrow-left"></i> Назад
+        </a>
+        
+        <h1 class="page-title">Basic Exercises</h1>
+        
+        <div class="exercises-grid">
+            <!-- Exercise Cards (unchanged content) -->
+            <div class="exercise-card">
+                <div class="video-container">
+                    <div class="play-button">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <iframe class="exercise-video" 
+                            src="https://www.youtube.com/embed/IODxDxX7oi4" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="exercise-content">
+                    <h2 class="exercise-title">Push-ups</h2>
+                    <p class="exercise-description">Класическо упражнение за горната част на тялото, което укрепва гръдните мускули, раменете и трицепса.</p>
+                    <div class="exercise-details">
+                        <span class="exercise-detail"><i class="fas fa-clock"></i> 3x12</span>
+                        <span class="exercise-detail"><i class="fas fa-fire"></i> 100 кал</span>
+                    </div>
+                    <div class="completion-section">
+                        <div class="completion-checkbox">
+                            <input type="checkbox" id="pushups-complete" onchange="updateCompletionStatus('pushups')">
+                            <label for="pushups-complete">Завършено</label>
+                        </div>
+                        <span class="completion-status" id="pushups-status">Незавършено</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Repeat similar structure for other exercises -->
+            <!-- Squats Card -->
+            <div class="exercise-card">
+                <div class="video-container">
+                    <div class="play-button">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <iframe class="exercise-video" 
+                            src="https://www.youtube.com/embed/ultWZbUMPL8" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="exercise-content">
+                    <h2 class="exercise-title">Squats</h2>
+                    <p class="exercise-description">Фундаментално упражнение за долната част на тялото, което укрепва бедрата и задните мускули.</p>
+                    <div class="exercise-details">
+                        <span class="exercise-detail"><i class="fas fa-clock"></i> 3x15</span>
+                        <span class="exercise-detail"><i class="fas fa-fire"></i> 150 кал</span>
+                    </div>
+                    <div class="completion-section">
+                        <div class="completion-checkbox">
+                            <input type="checkbox" id="squats-complete" onchange="updateCompletionStatus('squats')">
+                            <label for="squats-complete">Завършено</label>
+                        </div>
+                        <span class="completion-status" id="squats-status">Незавършено</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plank Card -->
+            <div class="exercise-card">
+                <div class="video-container">
+                    <div class="play-button">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <iframe class="exercise-video" 
+                            src="https://www.youtube.com/embed/pSHjTRCQxIw" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="exercise-content">
+                    <h2 class="exercise-title">Plank</h2>
+                    <p class="exercise-description">Отлично упражнение за коремните мускули, което подобрява стабилността и силата на тялото.</p>
+                    <div class="exercise-details">
+                        <span class="exercise-detail"><i class="fas fa-clock"></i> 3x1 мин</span>
+                        <span class="exercise-detail"><i class="fas fa-fire"></i> 80 кал</span>
+                    </div>
+                    <div class="completion-section">
+                        <div class="completion-checkbox">
+                            <input type="checkbox" id="plank-complete" onchange="updateCompletionStatus('plank')">
+                            <label for="plank-complete">Завършено</label>
+                        </div>
+                        <span class="completion-status" id="plank-status">Незавършено</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lunges Card -->
+            <div class="exercise-card">
+                <div class="video-container">
+                    <div class="play-button">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <iframe class="exercise-video" 
+                            src="https://www.youtube.com/embed/3XDriUn0udo" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="exercise-content">
+                    <h2 class="exercise-title">Lunges</h2>
+                    <p class="exercise-description">Ефективно упражнение за бедрата и задните мускули, което подобрява баланса и координацията.</p>
+                    <div class="exercise-details">
+                        <span class="exercise-detail"><i class="fas fa-clock"></i> 3x10</span>
+                        <span class="exercise-detail"><i class="fas fa-fire"></i> 120 кал</span>
+                    </div>
+                    <div class="completion-section">
+                        <div class="completion-checkbox">
+                            <input type="checkbox" id="lunges-complete" onchange="updateCompletionStatus('lunges')">
+                            <label for="lunges-complete">Завършено</label>
+                        </div>
+                        <span class="completion-status" id="lunges-status">Незавършено</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script type="module">
+        // JavaScript remains unchanged from original functionality
+        import {
+            updateCompletionStatus,
+            checkAndResetExercises,
+            resetExercisesAtMidnight,
+            showResetNotification
+        } from './exercise_utils.js';
+
+        const BASIC_EXERCISES = ['pushups', 'squats', 'plank', 'lunges'];
+        const POINTS_PER_EXERCISE = 5;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAndResetExercises(BASIC_EXERCISES, 'basic');
+            setInterval(() => resetExercisesAtMidnight('basic'), 60000);
+            resetExercisesAtMidnight('basic');
+            updateAuthLink();
+            loadProgress();
+        });
+
+        function isPointsAwarded(exerciseId, userId) {
+            const awardedPoints = JSON.parse(localStorage.getItem(`ttw_awardedPoints_${userId}`) || '{}');
+            return awardedPoints[exerciseId];
+        }
+
+        function markPointsAwarded(exerciseId, userId) {
+            let awardedPoints = JSON.parse(localStorage.getItem(`ttw_awardedPoints_${userId}`) || '{}');
+            awardedPoints[exerciseId] = true;
+            localStorage.setItem(`ttw_awardedPoints_${userId}`, JSON.stringify(awardedPoints));
+        }
+
+        function awardPoints(points, userId) {
+            // Get current user's points from ttw_users
+            let users = JSON.parse(localStorage.getItem('ttw_users') || '[]');
+            const userIndex = users.findIndex(user => user.username === userId);
+            
+            if (userIndex === -1) {
+                // Add new user
+                users.push({ username: userId, points: points });
+            } else {
+                // Update existing user's points
+                users[userIndex].points = (users[userIndex].points || 0) + points;
+            }
+            
+            // Save updated users array
+            localStorage.setItem('ttw_users', JSON.stringify(users));
+            
+            // Show success notification with points animation
+            showNotification(`+${points} точки!`, 'success');
+        }
+
+        window.updateCompletionStatus = (exercise) => {
+            const currentUser = localStorage.getItem('ttw_currentUser');
+            if (!currentUser) {
+                alert('Моля, влезте в системата, за да маркирате упражнения като завършени.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const checkbox = document.getElementById(`${exercise}-complete`);
+            const status = checkbox.checked ? 'complete' : 'incomplete';
+            
+            // Get current statuses
+            let statuses = JSON.parse(localStorage.getItem('ttw_exercise_statuses') || '{}');
+            if (!statuses[currentUser]) {
+                statuses[currentUser] = {};
+            }
+            
+            // Check if exercise was already completed
+            if (status === 'complete' && statuses[currentUser][exercise] === 'complete') {
+                showNotification('Вече сте завършили това упражнение!', 'warning');
+                checkbox.checked = true; // Keep checkbox checked
+                return;
+            }
+            
+            // Update status
+            statuses[currentUser][exercise] = status;
+            localStorage.setItem('ttw_exercise_statuses', JSON.stringify(statuses));
+            
+            // Update visual indicators
+            const statusElement = document.getElementById(`${exercise}-status`);
+            if (status === 'complete') {
+                statusElement.textContent = 'Завършено';
+                statusElement.classList.add('completed');
+                statusElement.classList.remove('incomplete');
+                
+                // Check if points were already awarded
+                if (!isPointsAwarded(exercise, currentUser)) {
+                    awardPoints(POINTS_PER_EXERCISE, currentUser);
+                    markPointsAwarded(exercise, currentUser);
+                } else {
+                    showNotification('Вече сте получили точки за това упражнение!', 'warning');
+                }
+            } else {
+                statusElement.textContent = 'Незавършено';
+                statusElement.classList.remove('completed');
+                statusElement.classList.add('incomplete');
+            }
+        };
+
+        // Add function to update auth links
+        function updateAuthLink() {
+            const authLink = document.getElementById('auth-link');
+            if (!authLink) return;
+            
+            const currentUser = localStorage.getItem('ttw_currentUser');
+            
+            if (currentUser) {
+                authLink.innerHTML = `<a href="#" onclick="handleLogout()">Изход (${currentUser})</a>`;
+            } else {
+                authLink.innerHTML = '<a href="login.html">Вход</a>';
+            }
+        }
+
+        // Add function to load saved progress
+        function loadProgress() {
+            const currentUser = localStorage.getItem('ttw_currentUser');
+            if (!currentUser) return;
+            
+            // Get saved exercise statuses
+            const statuses = JSON.parse(localStorage.getItem('ttw_exercise_statuses') || '{}');
+            if (!statuses[currentUser]) return;
+            
+            // Loop through basic exercises and update UI
+            BASIC_EXERCISES.forEach(exercise => {
+                const status = statuses[currentUser][exercise];
+                if (status === 'complete') {
+                    const checkbox = document.getElementById(`${exercise}-complete`);
+                    const statusElement = document.getElementById(`${exercise}-status`);
+                    
+                    // Update checkbox
+                    if (checkbox) checkbox.checked = true;
+                    
+                    // Update status text and classes
+                    if (statusElement) {
+                        statusElement.textContent = 'Завършено';
+                        statusElement.classList.add('completed');
+                        statusElement.classList.remove('incomplete');
+                    }
+                }
+            });
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `points-notification ${type}`;
+            
+            // Add appropriate icon based on type
+            let icon = '';
+            switch(type) {
+                case 'success':
+                    icon = '<i class="fas fa-check-circle"></i>';
+                    break;
+                case 'warning':
+                    icon = '<i class="fas fa-exclamation-circle"></i>';
+                    break;
+                case 'info':
+                    icon = '<i class="fas fa-info-circle"></i>';
+                    break;
+            }
+            
+            notification.innerHTML = `${icon} ${message}`;
+            document.body.appendChild(notification);
+            
+            // Add slide out animation before removing
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out forwards';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 2700);
+        }
+    </script>
+</body>
+</html>
